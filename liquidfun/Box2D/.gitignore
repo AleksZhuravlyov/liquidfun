@@ -1,0 +1,8 @@
+.idea
+cmake-build-debug/
+Unittests/BlockAllocatorTests
+Unittests/BodyContactsTests
+Unittests/FreeListTests
+Unittests/IntrusiveListTests
+Unittests/SlabAllocatorTests
+Unittests/TrackedBlockTests
