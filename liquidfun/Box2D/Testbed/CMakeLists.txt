@@ -81,6 +81,7 @@ set(Testbed_Tests_SRCS
 	Tests/Fracker.h
 	Tests/Impulse.h
 	Tests/LiquidTimer.h
+	Tests/FoldedGeology.h
 	Tests/Maxwell.h
 	Tests/MultipleParticleSystems.h
 	Tests/Particles.h

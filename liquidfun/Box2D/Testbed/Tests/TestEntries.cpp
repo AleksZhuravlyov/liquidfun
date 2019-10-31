@@ -87,6 +87,7 @@
 #include "Fracker.h"
 #include "Impulse.h"
 #include "LiquidTimer.h"
+#include "FoldedGeology.h"
 #include "Maxwell.h"
 #include "MultipleParticleSystems.h"
 #include "Particles.h"
@@ -107,6 +108,7 @@ TestEntry g_testEntries[] =
 	{"Sparky", Sparky::Create},
 	{"DamBreak", DamBreak::Create},
 	{"Liquid Timer", LiquidTimer::Create},
+    {"Folded Geology", FoldedGeology::Create},
 	{"Wave Machine", WaveMachine::Create},
 	{"Particles", Particles::Create},
 	{"Faucet", Faucet::Create},

@@ -15,14 +15,14 @@
 * misrepresented as being the original software.
 * 3. This notice may not be removed or altered from any source distribution.
 */
-#ifndef LIQUID_TIMER_H
-#define LIQUID_TIMER_H
+#ifndef FOLDEDGEOLOGY_H
+#define FOLDEDGEOLOGY_H
 
-class LiquidTimer : public Test
+class FoldedGeology : public Test
 {
 public:
 
-	LiquidTimer()
+    FoldedGeology()
 	{
 		// Setup particle parameters.
 		TestMain::SetParticleParameters(k_paramDef, k_paramDefCount);
@@ -30,6 +30,9 @@ public:
 		{
 			b2BodyDef bd;
 			b2Body* ground = m_world->CreateBody(&bd);
+
+            b2Vec2 gravity(0.0f, 10.0f);
+            m_world->SetGravity(gravity);
 
 			b2ChainShape shape;
 			const b2Vec2 vertices[4] = {
@@ -45,7 +48,7 @@ public:
 		m_particleSystem->SetRadius(0.025f);
 		{
 			b2PolygonShape shape;
-			shape.SetAsBox(2, 0.4f, b2Vec2(0, 3.6f), 0);
+			shape.SetAsBox(2, 0.2f, b2Vec2(0, 0.2f), 0);
 			b2ParticleGroupDef pd;
 			pd.flags = TestMain::GetParticleParameterValue();
 			pd.shape = &shape;
@@ -71,7 +74,7 @@ public:
 			body->CreateFixture(&shape, 0.1f);
 		}
 
-		{
+		/*{
 			b2BodyDef bd;
 			b2Body* body = m_world->CreateBody(&bd);
 			b2EdgeShape shape;
@@ -85,13 +88,13 @@ public:
 			b2EdgeShape shape;
 			shape.Set(b2Vec2(-1.1f, 3.2f), b2Vec2(-1.1f, 2.8f));
 			body->CreateFixture(&shape, 0.1f);
-		}
+		}*/
 
 		{
 			b2BodyDef bd;
 			b2Body* body = m_world->CreateBody(&bd);
 			b2EdgeShape shape;
-			shape.Set(b2Vec2(-1.6f, 2.4f), b2Vec2(0.8f, 2));
+			shape.Set(b2Vec2(-1.6f, 2.4f), b2Vec2(0.6f, 2));
 			body->CreateFixture(&shape, 0.1f);
 		}
 
@@ -143,7 +146,7 @@ public:
 
 	static Test* Create()
 	{
-		return new LiquidTimer;
+		return new FoldedGeology;
 	}
 
 	static const ParticleParameter::Value k_paramValues[];
@@ -151,24 +154,24 @@ public:
 	static const uint32 k_paramDefCount;
 };
 
-const ParticleParameter::Value LiquidTimer::k_paramValues[] =
+const ParticleParameter::Value FoldedGeology::k_paramValues[] =
 {
 	{b2_tensileParticle | b2_viscousParticle,
 		ParticleParameter::k_DefaultOptions, "tensile + viscous"},
 };
-const ParticleParameter::Definition LiquidTimer::k_paramDef[] =
+const ParticleParameter::Definition FoldedGeology::k_paramDef[] =
 {
 	{
-		LiquidTimer::k_paramValues,
-		B2_ARRAY_SIZE(LiquidTimer::k_paramValues)
+        FoldedGeology::k_paramValues,
+		B2_ARRAY_SIZE(FoldedGeology::k_paramValues)
 	},
 	{
 		ParticleParameter::k_particleTypesPtr,
 		ParticleParameter::k_particleTypesCount
 	},
 };
-const uint32 LiquidTimer::k_paramDefCount =
-	B2_ARRAY_SIZE(LiquidTimer::k_paramDef);
+const uint32 FoldedGeology::k_paramDefCount =
+	B2_ARRAY_SIZE(FoldedGeology::k_paramDef);
 
 
 #endif
