@@ -32,6 +32,7 @@ public:
             b2Vec2 gravity(0.0f, 10.0f);
             m_world->SetGravity(gravity);
 
+            // Shape of main layout
             b2ChainShape shape;
             const b2Vec2 vertices[4] = {
                     b2Vec2(-2, 0),
@@ -43,9 +44,11 @@ public:
 
         }
 
+        // Radius of particles
         m_particleSystem->SetRadius(0.02f);
         {
             b2PolygonShape shape;
+            // Size and position of particles
             shape.SetAsBox(2, 0.4f, b2Vec2(0, 0.6f), 0);
             b2ParticleGroupDef pd;
             pd.flags = TestMain::GetParticleParameterValue();
@@ -58,6 +61,7 @@ public:
         }
 
         {
+            // bottom border coords
             b2BodyDef bd;
             b2Body *body = m_world->CreateBody(&bd);
             b2EdgeShape shape;
@@ -66,6 +70,7 @@ public:
         }
 
         {
+            // right border coords
             b2BodyDef bd;
             b2Body *body = m_world->CreateBody(&bd);
             b2EdgeShape shape;
@@ -74,6 +79,7 @@ public:
         }
 
         {
+            // source shape left coords
             b2BodyDef bd;
             b2Body *body = m_world->CreateBody(&bd);
             b2EdgeShape shape;
@@ -82,6 +88,7 @@ public:
         }
 
         {
+            // source shape right coords
             b2BodyDef bd;
             b2Body *body = m_world->CreateBody(&bd);
             b2EdgeShape shape;
@@ -89,6 +96,7 @@ public:
             body->CreateFixture(&shape, 0.1f);
         }
 
+           // handmade thing (fault)
         {
             b2BodyDef bd;
             b2Body *body = m_world->CreateBody(&bd);
