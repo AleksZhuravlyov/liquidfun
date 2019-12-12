@@ -96,37 +96,83 @@ public:
       body->CreateFixture(&shape, 0.1f);
     }
 
-    // handmade thing (fault)
+    // handmade thing (right part of bed)
     {
       b2BodyDef bd;
-      b2Body *body = m_world->CreateBody(&bd);
+      bedRight = m_world->CreateBody(&bd);
       b2EdgeShape shape;
 
 
-      float32 xs[44] = {-2.0, -1.9, -1.8, -1.7, -1.6, -1.5, -1.4, -1.3,
-                        -1.2, -1.4, -1.3, -1.2, -1.1, -1.0, -0.9, -0.8,
-                        -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0.0,
-                        0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0,
-                        1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0};
+      float32 xs[33] = {-1.0, -1.1, -1.0, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4,
+                        -0.3, -0.2, -0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6,
+                        0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7,
+                        1.8, 1.9, 2.0};
 
-      float32 ys[44] = {3.67058, 3.75960, 3.79486, 3.76772, 3.68482,
-                        3.56647, 3.44163, 3.34088, 3.28888, 2.58410,
-                        2.52641, 2.52960, 2.59286, 2.70072, 2.82677,
-                        2.95237, 3.05951, 3.13836, 3.18578, 3.19988,
-                        3.18010, 3.12723, 3.04337, 2.93186, 2.79717,
-                        2.64464, 2.48037, 2.31090, 2.14299, 1.98333,
-                        1.83829, 1.71365, 1.61438, 1.54444, 1.50661,
-                        1.50240, 1.53199, 1.59419, 1.68652, 1.80530,
-                        1.94579, 2.10240, 2.26889, 2.43860};
+      float32 ys[33] = {4.00, 2.70, 2.70, 2.78, 2.94, 3.06, 3.22, 3.34, 3.43,
+                        3.49, 3.50, 3.47, 3.41, 3.31, 3.18, 3.02, 2.83, 2.64,
+                        2.44, 2.24, 2.06, 1.89, 1.74, 1.63, 1.55, 1.51, 1.50,
+                        1.54, 1.62, 1.73, 1.87, 2.04, 2.2};
 
-      for (int32 i = 0; i < 43; ++i) {
+      for (int32 i = 0; i < 32; ++i) {
         shape.Set(b2Vec2(xs[i], ys[i]), b2Vec2(xs[i + 1], ys[i + 1]));
-        body->CreateFixture(&shape, 0.1f);
+        bedRight->CreateFixture(&shape, 0.1f);
+      }
+
+    }
+
+    // handmade thing (left part of bed)
+    {
+      b2BodyDef bd;
+      bedLeft = m_world->CreateBody(&bd);
+      b2EdgeShape shape;
+
+
+      float32 xs[11] = {-2.1, -2.0, -1.9, -1.8, -1.7, -1.6, -1.5, -1.4, -1.3,
+                        -1.2, -1.1};
+
+      float32 ys[11] = {2.70, 2.73, 2.85, 3.02, 3.19, 3.29, 3.29, 3.19, 3.02,
+                        2.85, 2.7};
+
+      for (int32 i = 0; i < 10; ++i) {
+        shape.Set(b2Vec2(xs[i], ys[i]), b2Vec2(xs[i + 1], ys[i + 1]));
+        bedLeft->CreateFixture(&shape, 0.1f);
       }
 
     }
 
   }
+
+
+  // Run a simulation step.
+  void Step(Settings *settings) {
+    const float32 dt = 1.0f / settings->hz;
+    Test::Step(settings);
+
+    static const char *k_keys[] = {"Keys: (f) fault"};
+
+    for (uint32 i = 0; i < B2_ARRAY_SIZE(k_keys); ++i) {
+      m_debugDraw.DrawString(5, m_textLine, k_keys[i]);
+      m_textLine += DRAW_STRING_NEW_LINE;
+    }
+
+  }
+
+  // Simulate fault moving left part of bed.
+  void Keyboard(unsigned char key) {
+    uint32 parameter = 0;
+    switch (key) {
+      case 'f':
+        bedLeft->SetTransform(
+            bedLeft->GetPositionX() + 0.01 / 13.,
+            bedLeft->GetPositionY() + 0.01,
+            0);
+        break;
+      default:
+        // Nothing.
+        return;
+    }
+  }
+
 
   float32 GetDefaultViewZoom() const {
     return 0.1f;
@@ -139,6 +185,11 @@ public:
   static const ParticleParameter::Value k_paramValues[];
   static const ParticleParameter::Definition k_paramDef[];
   static const uint32 k_paramDefCount;
+
+private:
+  b2Body *bedRight;
+  b2Body *bedLeft;
+
 };
 
 const ParticleParameter::Value FoldedGeology::k_paramValues[] =
